@@ -1,181 +1,86 @@
 <p align="center">
+  <small>Join the project community on our server!</small>
+  <br/><br/>
+  <a href="https://discord.gg/btZpkp45gQ" target="_blank" title="Join our community!">
+    <img src="https://dcbadge.limes.pink/api/server/https://discord.gg/btZpkp45gQ"/>
+  </a>
+</p>
+<hr/>
+
+<p align="center">
   <img alt="opensnitch" src="https://raw.githubusercontent.com/evilsocket/opensnitch/master/ui/opensnitch/res/icon.png" height="160" />
   <p align="center">
+    <img src="https://github.com/evilsocket/opensnitch/workflows/Build%20status/badge.svg" />
     <a href="https://github.com/evilsocket/opensnitch/releases/latest"><img alt="Release" src="https://img.shields.io/github/release/evilsocket/opensnitch.svg?style=flat-square"></a>
     <a href="https://github.com/evilsocket/opensnitch/blob/master/LICENSE.md"><img alt="Software License" src="https://img.shields.io/badge/license-GPL3-brightgreen.svg?style=flat-square"></a>
     <a href="https://goreportcard.com/report/github.com/evilsocket/opensnitch/daemon"><img alt="Go Report Card" src="https://goreportcard.com/badge/github.com/evilsocket/opensnitch/daemon?style=flat-square"></a>
+    <a href="https://repology.org/project/opensnitch/versions"><img src="https://repology.org/badge/tiny-repos/opensnitch.svg" alt="Packaging status"></a>
   </p>
 </p>
 
-**OpenSnitch** is a GNU/Linux port of the Little Snitch application firewall. 
+<p align="center"><strong>OpenSnitch</strong> is a GNU/Linux application firewall.</p>
+
+<p align="center">•• <a href="#key-features">Key Features</a> • <a href="#download">Download</a> • <a href="#installation">Installation</a> • <a href="#opensnitch-in-action">Usage examples</a> • <a href="#in-the-press">In the press</a> ••</p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/evilsocket/opensnitch/master/screenshot.png" alt="OpenSnitch"/>
+  <img src="https://user-images.githubusercontent.com/2742953/85205382-6ba9cb00-b31b-11ea-8e9a-bd4b8b05a236.png" alt="OpenSnitch"/>
 </p>
 
-### TL;DR
+## Key features
+ * Interactive outbound connections filtering.
+ * [Block ads, trackers or malware domains](https://github.com/evilsocket/opensnitch/wiki/block-lists) system wide.
+ * Ability to [configure system firewall](https://github.com/evilsocket/opensnitch/wiki/System-rules) from the GUI (nftables).
+   - Configure input policy, allow inbound services, etc.
+ * Manage [multiple nodes](https://github.com/evilsocket/opensnitch/wiki/Nodes) from a centralized GUI.
+ * [SIEM integration](https://github.com/evilsocket/opensnitch/wiki/SIEM-integration)
 
-Make sure you have a correctly configured **Go >= 1.8** environment, that the `$GOPATH` environment variable is defined and then:
+## Download
 
-```bash
-# install dependencies
-sudo apt-get install protobuf-compiler libpcap-dev libnetfilter-queue-dev python3-pip
-go get github.com/golang/protobuf/protoc-gen-go
-go get -u github.com/golang/dep/cmd/dep
-python3 -m pip install --user grpcio-tools
-# clone the repository (ignore the message about no Go files being found)
-go get github.com/evilsocket/opensnitch
-cd $GOPATH/src/github.com/evilsocket/opensnitch
-# compile && install
-make
-sudo make install
-# enable opensnitchd as a systemd service and start the UI
-sudo systemctl enable opensnitchd
-sudo service opensnitchd start
-opensnitch-ui
-```
+Download deb/rpm packages for your system from https://github.com/evilsocket/opensnitch/releases
 
-### Daemon
+## Installation
 
-The `daemon` is implemented in Go and needs to run as root in order to interact with the Netfilter packet queue, edit 
-iptables rules and so on, in order to compile it you will need to install the `protobuf-compiler`, `libpcap-dev` and `libnetfilter-queue-dev`
-packages on your system, then just:
+#### deb
+> $ sudo apt install ./opensnitch*.deb ./python3-opensnitch-ui*.deb
 
-    cd daemon
-    make
+#### rpm
+> $ sudo dnf install opensnitch*.rpm
 
-You can then install it as a systemd service by doing:
+Then run: `$ opensnitch-ui` or launch the GUI from the Applications menu.
 
-    sudo make install
+Please, refer to [the documentation](https://github.com/evilsocket/opensnitch/wiki/Installation) for detailed information.
 
-The new `opensnitchd` service will log to `/var/log/opensnitchd.log`, save the rules inside `/etc/opensnitchd/rules` and connect to the default UI service socket `unix:///tmp/osui.sock`.
+## OpenSnitch in action
 
-### UI
+Examples of OpenSnitch intercepting unexpected connections:
 
-The user interface is a Python 3 software running as a `gRPC` server on a unix socket, to order to install its dependencies:
+https://github.com/evilsocket/opensnitch/discussions/categories/show-and-tell
 
-    cd ui
-    sudo pip3 install -r requirements.txt
+Have you seen a connection you didn't expect? [submit it!](https://github.com/evilsocket/opensnitch/discussions/new?category=show-and-tell)
 
-You will also need to install the package `python-pyqt5` for your system (if anyone finds a way to make this work from 
-the `requirements.txt` file feel free to send a PR).
+## In the press
 
-The UI is pip installable itself:
+- 2017 [PenTest Magazine](https://twitter.com/pentestmag/status/857321886807605248)
+- 11/2019 [It's Foss](https://itsfoss.com/opensnitch-firewall-linux/)
+- 03/2020 [Linux Format #232](https://www.linux-magazine.com/Issues/2020/232/Firewalld-and-OpenSnitch)
+- 08/2020 [Linux Magazine Polska #194](https://linux-magazine.pl/archiwum/wydanie/387)
+- 08/2021 [Linux Format #280](https://github.com/evilsocket/opensnitch/discussions/631)
+- 02/2022 [Linux User](https://www.linux-community.de/magazine/linuxuser/2022/03/)
+- 06/2022 [Linux Magazine #259](https://www.linux-magazine.com/Issues/2022/259/OpenSnitch)
 
-    sudo pip3 install .
+## Donations
 
-This will install the `opensnitch-ui` command on your system (you can auto startup it by `cp opensnitch_ui.desktop ~/.config/autostart/`).
-  
-#### UI Configuration
+If you find OpenSnitch useful and want to donate to the dedicated developers, you can do it from the **[Sponsor this project](https://github.com/sponsors/gustavo-iniguez-goya)** section on the right side of this repository.
 
-By default the UI will load its configuration from `~/.opensnitch/ui-config.json` (customizable with the `--config` argument), the 
-default contents of this file are:
+You can see here who are the current maintainers of OpenSnitch:
+https://github.com/evilsocket/opensnitch/commits/master
 
-```json
-{
-	"default_timeout": 15,
-	"default_action": "allow",
-	"default_duration": "until restart"
-}
-```
+## Contributors
 
-The `default_timeout` is the number of seconds after which the UI will take its default action, the `default_action` can be `allow` or `deny`
-and the `default_duration`, which indicates for how long the default action should be taken, can be `once`, `until restart` or `always` to
-persist the action as a new rule on disk.
+[See the list](https://github.com/evilsocket/opensnitch/graphs/contributors)
 
-### Running
+## Translating
 
-Once you installed both the daemon and the UI, you can enable the `opensnitchd` service to run at boot time:
-
-    sudo systemctl enable opensnitchd
-
-And run it with:
-
-    sudo service opensnitchd start
-
-While the UI can be started just by executing the `opensnitch-ui` command.
-
-#### Single UI with many computers
-
-You can also use `--socket "[::]:50051"` to have the UI use TCP instead of a unix socket and run the daemon on another
-computer with `-ui-socket "x.x.x.x:50051"` (where `x.x.x.x` is the IP of the computer running the UI service).
-
-### Rules
-
-Rules are stored as JSON files inside the `-rule-path` folder, in the simplest cast a rule looks like this:
-
-```json
-{
-   "created": "2018-04-07T14:13:27.903996051+02:00",
-   "updated": "2018-04-07T14:13:27.904060088+02:00",
-   "name": "deny-simple-www-google-analytics-l-google-com",
-   "enabled": true,
-   "action": "deny",
-   "duration": "always",
-   "operator": {
-     "type": "simple",
-     "operand": "dest.host",
-     "data": "www-google-analytics.l.google.com"
-   }
-}
-```
-
-| Field            | Description   |
-| -----------------|---------------|
-| created          | UTC date and time of creation. |
-| update           | UTC date and time of the last update. |
-| name             | The name of the rule. |
-| enabled          | Use to temporarily disable and enable rules without moving their files. |
-| action           | Can be `deny` or `allow`. |
-| duration         | For rules persisting on disk, this value is default to `always`. |
-| operator.type    | Can be `simple`, in which case a simple `==` comparison will be performed, or `regexp` if the `data` field is a regular expression to match. |
-| operator.operand | What element of the connection to compare, can be one of: `true` (will always match), `process.path` (the path of the executable), `process.command` (full command line, including path and arguments), `provess.env.ENV_VAR_NAME` (use the value of an environment variable of the process given its name), `user.id`, `dest.ip`, `dest.host` or `dest.port`. |
-| operator.data    | The data to compare the `operand` to, can be a regular expression if `type` is `regexp`. |
-
-An example with a regular expression:
-
-```json
-{
-   "created": "2018-04-07T14:13:27.903996051+02:00",
-   "updated": "2018-04-07T14:13:27.904060088+02:00",
-   "name": "deny-any-google-analytics",
-   "enabled": true,
-   "action": "deny",
-   "duration": "always",
-   "operator": {
-     "type": "regexp",
-     "operand": "dest.host",
-     "data": "(?i).*analytics.*\\.google\\.com"
-   }
-}
-```
-
-An example whitelisting a whole process:
-
-```json
-{
-   "created": "2018-04-07T15:00:48.156737519+02:00",
-   "updated": "2018-04-07T15:00:48.156772601+02:00",
-   "name": "allow-simple-opt-google-chrome-chrome",
-   "enabled": true,
-   "action": "allow",
-   "duration": "always",
-   "operator": {
-     "type": "simple",
-     "operand": "process.path",
-     "data": "/opt/google/chrome/chrome"
-   }
- }
-```
-
-### FAQ
-
-##### Why Qt and not GTK?
-
-I tried, but for very fast updates it failed bad on my configuration (failed bad = SIGSEGV), moreover I find Qt5 layout system superior and easier to use.
-
-##### Why gRPC and not DBUS?
-
-The UI service is able to use a TCP listener instead of a UNIX socket, that means the UI service itself can be executed on any 
-operating system, while receiving messages from a single local daemon instance or multiple instances from remote computers in the network,
-therefore DBUS would have made the protocol and logic uselessly GNU/Linux specific.
+<a href="https://hosted.weblate.org/engage/opensnitch/">
+<img src="https://hosted.weblate.org/widget/opensnitch/multi-auto.svg" alt="Translation status" />
+</a>
